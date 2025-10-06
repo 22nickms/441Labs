@@ -26,11 +26,11 @@ try:
 	while True:
 		t = time.time() - start # records current time elapsed
 		b1 = (math.sin(2 * math.pi * f * t)) ** 2 # Brightness function
-		duty1 = b * 100 # Duty cycle to measure from 0-100%
+		duty1 = b1 * 100 # Duty cycle to measure from 0-100%
 		pwm1.ChangeDutyCycle(duty) # LEC 4 pwm 
 
 		b2 = (math.sin(2 * math.pi * f * t - phi)) ** 2
-		duty2 = b * 100
+		duty2 = b2 * 100
 		pwm2.ChangeDutyCycle(duty)
 except KeyboardInterrupt:
 	print('\n Program Shutting Down')
@@ -40,5 +40,6 @@ finally:
 	pwm2.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
