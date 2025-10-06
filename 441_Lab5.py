@@ -16,21 +16,29 @@ GPIO.setup(p2, GPIO.OUT)
 f = 0.2 # frequency in [Hz]
 phi = math.pi / 11 # phase angle in [rad]
 
-pwm = GPIO.PWM(p, 500) #creates a PWM object (p) with frequency of 500 Hz
-pwm.start(0)
+pwm1 = GPIO.PWM(p, 500) #creates a PWM object (p) with a frequency of 500 Hz
+pwm2 = GPIO.PWM(p2, 500)
+pwm1.start(0)
+pwm2.start(0)
 
 try:
 	start = time.time() # Utilizes time.time() to initialize start time
 	while True:
 		t = time.time() - start # records current time elapsed
-		b = (math.sin(2 * math.pi * f * t - phi)) ** 2 # Brightness function
-		duty = b * 100 # Duty cycle to measure from 0-100%
-		pwm.ChangeDutyCycle(duty) # LEC 4 pwm 
+		b1 = (math.sin(2 * math.pi * f * t)) ** 2 # Brightness function
+		duty1 = b * 100 # Duty cycle to measure from 0-100%
+		pwm1.ChangeDutyCycle(duty) # LEC 4 pwm 
+
+		b2 = (math.sin(2 * math.pi * f * t - phi)) ** 2
+		duty2 = b * 100
+		pwm2.ChangeDutyCycle(duty)
 except KeyboardInterrupt:
 	print('\n Program Shutting Down')
 	pass
 finally:
-	pwm.stop()
+	pwm1.stop()
+	pwm2.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
