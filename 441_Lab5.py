@@ -24,7 +24,7 @@ try:
 	start = time.time() # Utilizes time.time() to initialize start time
 	while True:
 		t = time.time() - start
-		for i, n in GPIO_PWM:
+		for i, n in enumerate(GPIO_PWM):
 			phi = n * phi_increase
 			b = (math.sin(2 * math.pi * f * t - phi)) ** 2
 			duty = b * 100
@@ -37,6 +37,7 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
 
