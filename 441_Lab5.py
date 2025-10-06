@@ -4,22 +4,17 @@
 ## Part 1 time.time() function
 
 import RPi.GPIO as GPIO
-import time
-import math
+import time # import time module
+import math # import math module
 
-GPIO.setmode(GPIO.BCM)
-p = 2
-GPIO.setup(p, GPIO.OUT)
-p2 = 3
-GPIO.setup(p2, GPIO.OUT)
+GPIO_pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 0] # List of 10 LED pins
+for i in GPIO_pins: 
+	GPIO.setup(i, GPIO.OUT)
 
 f = 0.2 # frequency in [Hz]
 phi = math.pi / 11 # phase angle in [rad]
 
-pwm1 = GPIO.PWM(p, 500) #creates a PWM object (p) with a frequency of 500 Hz
-pwm2 = GPIO.PWM(p2, 500)
-pwm1.start(0)
-pwm2.start(0)
+GPIO_pwm = [
 
 try:
 	start = time.time() # Utilizes time.time() to initialize start time
@@ -40,6 +35,7 @@ finally:
 	pwm2.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
 
