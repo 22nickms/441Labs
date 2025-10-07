@@ -12,8 +12,8 @@ for i in GPIO_pins:
 	GPIO.setup(i, GPIO.OUT)
 
 # Threaded Callbacks Setup
-in1 = 14 # GPIO Pin 14
-GPIO.setup(in1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+button_GPIO = 14 # Button GPIO Pin 14
+GPIO.setup(button_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Declaration of key variables in Brightness Equation (f, phi)
 f = 0.2 # frequency in [Hz]
@@ -25,10 +25,12 @@ GPIO_pwm = [GPIO.PWM(i, bf) for i in GPIO_pins]
 for pwm in GPIO_pwm:
 	pwm.start(0)
 
-def myCallback(channel):
-	print("Rising edge detected on pin %d" % 14)
+def buttonCallback(channel):
+	global step_sign
+	step_sign *= -1
+	
 
-GPIO.add_event_detect(in1, GPIO.RISING, callback=myCallback, bouncetime=100)
+GPIO.add_event_detect(button_GPIO, GPIO.RISING, callback=buttonCallback, bouncetime=250)
 
 # try-except-finally block to run traversing LED path
 try:
@@ -43,13 +45,14 @@ try:
 			pwm.ChangeDutyCycle(duty)  # Modulates ON signal time
 			i += 1 # Counter Sequence until all elements are clocked
 except KeyboardInterrupt:
-	print('\n Program Shutting Down')
+	print('\n Exit')
 	pass
 finally:
 	for pwm in GPIO_pwm:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
 
