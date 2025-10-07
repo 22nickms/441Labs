@@ -11,14 +11,24 @@ GPIO_pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 0] # List of 10 LED pins
 for i in GPIO_pins: 
 	GPIO.setup(i, GPIO.OUT)
 
+# Threaded Callbacks Setup
+in1 = 14 # GPIO Pin 14
+GPIO.setup(in1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
 # Declaration of key variables in Brightness Equation (f, phi)
 f = 0.2 # frequency in [Hz]
 phi_plus = math.pi / 11 # incremental step in [rad]
 
 # PWM Declaration with Base Frequency
-GPIO_pwm = [GPIO.PWM(i, 500) for i in GPIO_pins]
+bf = 500 # [Hz]
+GPIO_pwm = [GPIO.PWM(i, bf) for i in GPIO_pins]
 for pwm in GPIO_pwm:
 	pwm.start(0)
+
+def myCallback(channel):
+	print("Rising edge detected on pin %d" % 14)
+
+GPIO.add_event_detect(in1, GPIO.RISING, callback=myCallback, bouncetime=100)
 
 # try-except-finally block to run traversing LED path
 try:
@@ -40,6 +50,7 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
 
