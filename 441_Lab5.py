@@ -26,7 +26,7 @@ try:
 	while True:
 		t = time.time() - start
 		i = 0 # Initialize counter variable
-		for pwm in GPIO.pwm
+		for pwm in GPIO.pwm:
 			phi = i * phi_plus # Incremental Phi
 			b = (math.sin(2 * math.pi * f * t - phi)) ** 2 # Brightness Equation
 			duty = b * 100  # Duty cycle for whole succession (0-100)
@@ -40,5 +40,6 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
