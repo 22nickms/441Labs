@@ -26,10 +26,8 @@ for pwm in GPIO_pwm:
 	pwm.start(0)
 
 def buttonCallback(channel):
-	global step_sign
-	step_sign *= -1
-	
-
+	global sign_phaselag
+	sign_phaselag *= -1
 GPIO.add_event_detect(button_GPIO, GPIO.RISING, callback=buttonCallback, bouncetime=250)
 
 # try-except-finally block to run traversing LED path
@@ -40,7 +38,7 @@ try:
 		i = 0 # Initialize counter variable
 		for pwm in GPIO_pwm:
 			phi = i * phi_plus # Incremental Phi
-			b = (math.sin(2 * math.pi * f * t - phi)) ** 2 # Brightness Equation
+			b = (math.sin(2 * math.pi * f * t - phi*sign_phaselag)) ** 2 # Brightness Equation
 			duty = b * 100  # Duty cycle for whole succession (0-100)
 			pwm.ChangeDutyCycle(duty)  # Modulates ON signal time
 			i += 1 # Counter Sequence until all elements are clocked
@@ -52,6 +50,7 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
 
