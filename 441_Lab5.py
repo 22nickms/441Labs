@@ -4,6 +4,8 @@ import RPi.GPIO as GPIO
 import time # import time module
 import math # import math module
 
+GPIO.setmode(GPIO.BCM)
+
 # Assignment of GPIO pins to LED pins
 GPIO_pins = [2, 3, 4, 17, 27, 22, 10, 9, 11, 0] # List of 10 LED pins
 for i in GPIO_pins: 
@@ -24,7 +26,7 @@ try:
 	start = time.time() # Utilizes time.time() to initialize start time
 	while True:
 		t = time.time() - start
-		for i, pwm in enumerate(GPIO_PWM):
+		for i, pwm in enumerate(GPIO_pwm):
 			phi = i * phi_increase
 			b = (math.sin(2 * math.pi * f * t - phi)) ** 2
 			duty = b * 100
@@ -37,3 +39,4 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
