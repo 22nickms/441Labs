@@ -18,6 +18,7 @@ GPIO.setup(button_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # Declaration of key variables in Brightness Equation (f, phi)
 f = 0.2 # frequency in [Hz]
 phi_plus = math.pi / 11 # incremental step in [rad]
+sign_phaselag = 1
 
 # PWM Declaration with Base Frequency
 bf = 500 # [Hz]
@@ -50,6 +51,7 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
 
 
 
