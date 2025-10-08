@@ -30,8 +30,8 @@ for pwm in GPIO_pwm:
 def buttonCallback(channel):
 	global sign_phaselag # Placed in the function so it can be varied
 	sign_phaselag *= -1 # Changes sign (direction of wave)
-GPIO.add_event_detect(button_GPIO, GPIO.BOTH, callback=buttonCallback, bouncetime=250) 
-# Add event syntax --> Uses GPIO.BOTH for both LOW-HIGH and HIGH-LOW signal triggers
+GPIO.add_event_detect(button_GPIO, GPIO.RISING, callback=buttonCallback, bouncetime=250) 
+# Add event syntax
 
 # try-except-finally block to run traversing LED path
 try:
@@ -53,3 +53,4 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
+
