@@ -26,10 +26,11 @@ GPIO_pwm = [GPIO.PWM(i, bf) for i in GPIO_pins]
 for pwm in GPIO_pwm:
 	pwm.start(0)
 
+# Button Callback Function
 def buttonCallback(channel):
 	global sign_phaselag
-	sign_phaselag *= -1
-GPIO.add_event_detect(button_GPIO, GPIO.RISING, callback=buttonCallback, bouncetime=250)
+	sign_phaselag *= -1 # Changes sign (direction of wave)
+GPIO.add_event_detect(button_GPIO, GPIO.BOTH, callback=buttonCallback, bouncetime=250)
 
 # try-except-finally block to run traversing LED path
 try:
@@ -51,11 +52,3 @@ finally:
 		pwm.stop()
 	GPIO.cleanup()
 ## ----------------------------------------------------------------##
-
-
-
-
-
-
-
-
