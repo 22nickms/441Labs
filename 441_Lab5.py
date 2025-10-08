@@ -18,19 +18,20 @@ GPIO.setup(button_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # Declaration of key variables in Brightness Equation (f, phi)
 f = 0.2 # frequency in [Hz]
 phi_plus = math.pi / 11 # incremental step in [rad]
-sign_phaselag = 1
+sign_phaselag = 1 
 
 # PWM Declaration with Base Frequency
-bf = 500 # [Hz]
-GPIO_pwm = [GPIO.PWM(i, bf) for i in GPIO_pins]
+bf = 500 # Base Frequency [Hz]
+GPIO_pwm = [GPIO.PWM(i, bf) for i in GPIO_pins] # GPIO_pwm : i el to bf 
 for pwm in GPIO_pwm:
 	pwm.start(0)
 
 # Button Callback Function
 def buttonCallback(channel):
-	global sign_phaselag
+	global sign_phaselag # Placed in the function so it can be varied
 	sign_phaselag *= -1 # Changes sign (direction of wave)
-GPIO.add_event_detect(button_GPIO, GPIO.BOTH, callback=buttonCallback, bouncetime=250)
+GPIO.add_event_detect(button_GPIO, GPIO.BOTH, callback=buttonCallback, bouncetime=250) 
+# Add event syntax --> Uses GPIO.BOTH for both LOW-HIGH and HIGH-LOW signal triggers
 
 # try-except-finally block to run traversing LED path
 try:
