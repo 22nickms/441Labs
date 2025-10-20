@@ -23,7 +23,7 @@ GPIO.setup(s3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
 def s1_status(s1):
-    bug.active = not bug.active ## Turns bug on and off
+    bug.move = not bug.move ## Turns bug on and off
 
 def s2_status(s2):
     bug.isWrapOn = not bug.isWrapOn ## wrap state switch
@@ -40,7 +40,7 @@ GPIO.add_event_detect(s3, GPIO.BOTH, callback=s3_status, bouncetime=300)
 
 try:
     while True:
-        if bug.active:
+        if bug.move:
             bug.step()
             sleep(bug.timestep)
         else: 
