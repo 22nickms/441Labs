@@ -11,7 +11,7 @@ latchPin = 24
 clockPin = 25
 
 ss = Shifter(dataPin, latchPin, clockPin) 
-bug = Bug.Bug(ss)
+bug = Bug(ss)
 
 s1 = 5
 s2 = 6
@@ -50,3 +50,4 @@ except KeyboardInterrupt:
     GPIO.cleanup()
 
     print("Exiting program")
+
