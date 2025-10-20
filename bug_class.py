@@ -11,7 +11,7 @@ class Bug:
         self.x = x
         self.timestep = timestep
         self.isWrapOn = isWrapOn
-        self.__move = False
+        self.move = False
 
     def step(self):
         total_leds = 8
