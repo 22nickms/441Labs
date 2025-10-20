@@ -13,30 +13,30 @@ clockPin = 25
 ss = Shifter(dataPin, latchPin, clockPin) 
 bug = Bug(ss)
 
-s1 = 5
-s2 = 6
-s3 = 13
+s1 = 17
+s2 = 27
+s3 = 22
 
 GPIO.setup(s1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(s2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(s3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
-def s1_call(s1):
-    bug.active = not bug.active
+def s1_status(s1):
+    bug.active = not bug.active ## Turns bug on and off
 
-def s2_call(s2):
-    bug.isWrapOn = not bug.isWrapOn
+def s2_status(s2):
+    bug.isWrapOn = not bug.isWrapOn ## wrap state switch
 
-def s3_call(s3):
+def s3_status(s3): ## speed switch
     if GPIO.input(s3):
         bug.timestep = bug.timestep / 3
     else:
         bug.timestep = bug.timestep * 3
     
-GPIO.add_event_detect(s1, GPIO.RISING, callback=s1_call, bouncetime=300)
-GPIO.add_event_detect(s2, GPIO.RISING, callback=s2_call, bouncetime=300)
-GPIO.add_event_detect(s3, GPIO.BOTH, callback=s3_call, bouncetime=300)
+GPIO.add_event_detect(s1, GPIO.RISING, callback=s1_status, bouncetime=300)
+GPIO.add_event_detect(s2, GPIO.RISING, callback=s2_status, bouncetime=300)
+GPIO.add_event_detect(s3, GPIO.BOTH, callback=s3_status, bouncetime=300)
 
 try:
     while True:
@@ -44,10 +44,8 @@ try:
             bug.step()
             sleep(bug.timestep)
         else: 
-            sleep(delay)
+            sleep(0.05)
 except KeyboardInterrupt:
     bug.stop()
     GPIO.cleanup()
-
     print("Exiting program")
-
