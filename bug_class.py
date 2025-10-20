@@ -29,5 +29,5 @@ class Bug:
                 self.x = total_leds-1
     
     def stop(self):
-        self.__move = False
+        self.move = False
         self.__shifter.shiftByte(0)  # Turns off LEDS
