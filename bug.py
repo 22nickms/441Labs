@@ -1,14 +1,17 @@
-from shifter import Shifter
+import Shifter
+import Bug
 import RPi.GPIO as GPIO
 from time import sleep
 import random   
-from shifter import Bug
 
 GPIO.setmode(GPIO.BCM)
 
 dataPin = 23
 latchPin = 24
 clockPin = 25
+
+ss = Shifter(dataPin, latchPin, clockPin) 
+bug = Bug.Bug(ss)
 
 s1 = 5
 s2 = 6
@@ -18,9 +21,6 @@ GPIO.setup(s1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(s2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(s3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-ss = shifter.shifter(dataPin, latchPin, clockPin)
-
-bug = Bug.Bug(ss)
 
 def s1_call(s1):
     bug.active = not bug.active
@@ -43,6 +43,9 @@ try:
         if bug.active:
             bug.step()
             sleep(bug.timestep)
+        else: 
+            sleep(delay)
 except KeyboardInterrupt:
     bug.stop()
     GPIO.cleanup()
+    print("Exiting program")
