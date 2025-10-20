@@ -8,32 +8,26 @@ import random
 class Bug:
     def __init__(self, __shifter, timestep = 0.1, x = 3, isWrapOn = True):
         self.__shifter = __shifter
-        self.x = self.timestep = timestep
+        self.x = x
+        self.timestep = timestep
         self.isWrapOn = isWrapOn
-
         self.__move = False
 
     def step(self):
-        leds = 8
+        total_leds = 8
         pattern = 1 << self.x
         self.__shifter.shiftByte(pattern)
         s = random.choice([-1,1])
         self.x += s
 
-
         if self.isWrapOn:
-            self.x = self.x % leds
+            self.x = self.x % total_leds
         else:
             if self.x < 0:
                 self.x = 0
-            elif self.x > leds-1:
-                self.x = leds-1
-
-    def start(self):
-        self.__move = True
-        while self.__move:
-            self.step()
-            time.sleep(self.timestep)
+            elif self.x > total_leds-1:
+                self.x = total_leds-1
     
     def stop(self):
         self.__move = False
+        self.__shifter.shiftByte(0)  # Turns off LEDS
