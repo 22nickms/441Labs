@@ -1,27 +1,28 @@
 import RPi.GPIO as GPIO
 import time
-import random
 
 ## Shifter Class
 class Shifter:
-	def __init__(self, serial_pin, latch_pin, clock_pin):
-		self.serial = serial_pin 
-		self.clock = clock_pin
-		self.latch = latch_pin
-		self.start()
+    def __init__(self, serial_pin, latch_pin, clock_pin):
+        self.__serial = serial_pin
+        self.__clock = clock_pin
+        self.__latch = latch_pin
+        self.__setup()
 
-	def start(self):
-		GPIO.setup(self.serial, GPIO.OUT)
-		GPIO.setup(self.latch, GPIO.OUT, initial=0)
-		GPIO.setup(self.clock, GPIO.OUT, initial=0)
+    def __setup(self):
+        GPIO.setup(self.__serial, GPIO.OUT)
+        GPIO.setup(self.__latch, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(self.__clock, GPIO.OUT, initial=GPIO.LOW)
 
-	def __ping(self,p):
-		GPIO.output(p,1)
-		time.sleep(0)
-		GPIO.output(p,0)
+    def __ping(self, pin):
+        GPIO.output(pin, GPIO.HIGH)
+        time.sleep(0)
+        GPIO.output(pin, GPIO.LOW)
 
-	def shiftByte(self,b):
-		for i in range(8):
-			GPIO.output(self.serial, b & (1<<i))
-			self.__ping(self.clock)
-		self._ping(self.latch)
+    def shiftByte(self, value):
+        GPIO.output(self.__latch, GPIO.LOW)
+        for i in range(8):
+            bit_val = (value >> i) & 0x01
+            GPIO.output(self.__serial, bit_val)
+            self.__ping(self.__clock)
+        GPIO.output(self.__latch, GPIO.HIGH)
