@@ -1,5 +1,5 @@
-import Shifter
-import Bug
+from shifter1 import Shifter
+from bug_class import Bug
 import RPi.GPIO as GPIO
 from time import sleep
 import random   
@@ -48,4 +48,5 @@ try:
 except KeyboardInterrupt:
     bug.stop()
     GPIO.cleanup()
+
     print("Exiting program")
