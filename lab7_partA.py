@@ -5,9 +5,9 @@ import threading # Threading Module
 
 GPIO.setmode(GPIO.BCM) # BCM Numbering
 
-LED1 = 23 # Assigned to GPIO Pin 23
-LED2 = 24 # Assigned to GPIO Pin 24
-LED3 = 25 # Assigned to GPIO Pin 25
+LED1 = 17 # Assigned to GPIO Pin 17
+LED2 = 27 # Assigned to GPIO Pin 27
+LED3 = 22 # Assigned to GPIO Pin 22
 LED_PINS = {'LED1': LED1, 'LED2': LED2, 'LED3': LED3}
 
 pwm = {}
@@ -88,6 +88,7 @@ except KeyboardInterrupt:
     print("Cleaning up GPIO...")
     s.close()
     GPIO.cleanup()
+
 
 
 
