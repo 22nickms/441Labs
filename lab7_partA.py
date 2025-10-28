@@ -1,11 +1,13 @@
-import RPi.GPIO as GPIO
-import socket
-from time import sleep
-import threading
+import RPi.GPIO as GPIO # GPIO Pins
+import socket # Imported Socket Module
+from time import sleep # Imported sleep from the time module
+import threading # Threading Module
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM) # BCM Numbering
 
-LED1, LED2, LED3 = 23, 24, 25
+LED1 = 23 # Assigned to GPIO Pin 23
+LED2 = 24 # Assigned to GPIO Pin 24
+LED3 = 25 # Assigned to GPIO Pin 25
 LED_PINS = {'LED1': LED1, 'LED2': LED2, 'LED3': LED3}
 
 pwm = {}
@@ -67,10 +69,10 @@ def serve_web_page():
                 update_led(data_dict['option'], int(data_dict['slider1']))
 
         response = web_page()
-        conn.send('HTTP/1.1 200 OK\n')
-        conn.send('Content-Type: text/html\n')
-        conn.send('Connection: close\n\n')
-        conn.sendall(response.encode('utf-8'))
+        conn.send('HTTP/1.1 200 OK\r\n')
+        conn.send('Content-Type: text/html\r\n')
+        conn.send('Connection: close\r\n\n')
+        conn.sendall(response)
         conn.close()
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,8 +87,8 @@ try:
 except KeyboardInterrupt:
     print("Cleaning up GPIO...")
     s.close()
-    pwm.stop()
     GPIO.cleanup()
+
 
 
 
