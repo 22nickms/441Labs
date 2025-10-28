@@ -34,7 +34,7 @@ def web_page():
     </body>
     </html>
     """
-    return html
+    return bytes(html, 'utf-8')
 
 def parsePOSTdata(data):
     data_dict = {}
@@ -85,6 +85,8 @@ try:
 except KeyboardInterrupt:
     print("Cleaning up GPIO...")
     s.close()
+    pwm.stop()
     GPIO.cleanup()
+
 
 
