@@ -74,7 +74,7 @@ def serve_web_page():
         conn.close()
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('', 80))
+s.bind(('', 8080))
 s.listen(3)
 
 try:
@@ -86,4 +86,5 @@ except KeyboardInterrupt:
     print("Cleaning up GPIO...")
     s.close()
     GPIO.cleanup()
+
 
