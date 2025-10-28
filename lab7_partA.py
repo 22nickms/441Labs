@@ -18,7 +18,7 @@ for key, pin in LED_PINS.items():
 
 brightness = {"LED1": 0, "LED2": 0, "LED3": 0}
 
-def web_page():
+def web_page(led_brightness):
     html = f"""
     <!DOCTYPE html>
     <html>
@@ -26,12 +26,12 @@ def web_page():
     <h2>Brightness level:</h2>
 
     <form action="/" method="POST">
-        <input type="range" name="slider1" min="0" max="100" value="50"><br>
+        <input type="range" name="brightness" min="0" max="100" value="50"><br>
         <p>Select LED:</p>
-        <input type="radio" name="option" value="LED1"> LED1 ({brightness['LED1']}%)<br>
-        <input type="radio" name="option" value="LED2"> LED2 ({brightness['LED2']}%)<br>
-        <input type="radio" name="option" value="LED3"> LED3 ({brightness['LED3']}%)<br><br>
-        <input type="submit" value="Submit">
+        <input type="radio" name="LED_PINS" value="0"> LED1 ({brightness['LED1']}%)<br>
+        <input type="radio" name="LED_PINS" value="1"> LED2 ({brightness['LED2']}%)<br>
+        <input type="radio" name="LED_PINS" value="2"> LED3 ({brightness['LED3']}%)<br><br>
+        <input type="submit" value="Modify Brightness">
     </form>
     </body>
     </html>
@@ -49,11 +49,11 @@ def parsePOSTdata(data):
             data_dict[k] = v
     return data_dict
 
-def update_led(option, slider_val):
-    if option in pwm:
-        pwm[option].ChangeDutyCycle(slider_val)
-        brightness[option] = slider_val
-        print(f"{option} brightness set to {slider_val}%")
+def update_led(LED_PINS, brightness):
+    if LED_PINS in pwm:
+        pwm[LED_PINS].ChangeDutyCycle(brightness)
+        brightness[LED_PINS] = slider_val
+        print(f"{LED_PINS} brightness set to {brightness}%")
 
 def serve_web_page():
     while True:
@@ -65,8 +65,8 @@ def serve_web_page():
 
         if "POST" in request:
             data_dict = parsePOSTdata(request)
-            if 'option' in data_dict and 'slider1' in data_dict:
-                update_led(data_dict['option'], int(data_dict['slider1']))
+            if 'LED_PINS' in data_dict and 'brightness' in data_dict:
+                update_led(data_dict['LED_PINS'], int(data_dict['brightness']))
 
         response = web_page()
         conn.send('HTTP/1.1 200 OK\r\n')
@@ -88,6 +88,7 @@ except KeyboardInterrupt:
     print("Cleaning up GPIO...")
     s.close()
     GPIO.cleanup()
+
 
 
 
