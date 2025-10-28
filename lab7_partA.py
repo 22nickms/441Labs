@@ -86,3 +86,4 @@ except KeyboardInterrupt:
     print("Cleaning up GPIO...")
     s.close()
     GPIO.cleanup()
+
