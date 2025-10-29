@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # --- GPIO setup ---
 GPIO.setmode(GPIO.BCM)
-LED_PINS = {'LED1': 23, 'LED2': 24, 'LED3': 25}
+LED_PINS = {'LED1': 17, 'LED2': 27, 'LED3': 22}
 
 # Create PWM objects
 pwm = {}
@@ -92,4 +92,5 @@ if __name__ == '__main__':
         for p in pwm.values():
             p.stop()
         GPIO.cleanup()
+
 
