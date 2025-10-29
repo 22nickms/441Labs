@@ -52,9 +52,9 @@ def parsePOSTdata(data): # From lecture
     return data_dict
 
 def update_LED(led, brightness_value):
-    if led in pwm:
-        pwm[led].ChangeDutyCycle(brightness_value)
-        brightness[led] = brightness_value
+    if led in pwm: # LED Availability
+        pwm[led].ChangeDutyCycle(brightness_value) # PWM --> LED
+        brightness[led] = brightness_value # Brightness Tracker
         print(f"{led} brightness set to {brightness_value}%")
 
 def serve_web_page():
@@ -67,7 +67,6 @@ def serve_web_page():
         conn, (client_ip, client_port) = s.accept()
         print(f"Connection from {client_ip}:{client_port}")
         request = conn.recv(2048).decode('utf-8')
-       # print(f"Request: {request.split()[0]} {request.split()[1]}")
 
         # POST Requests 
         if "POST" in request:
@@ -77,12 +76,12 @@ def serve_web_page():
             if 'led' in data_dict and 'brightness' in data_dict:
                 led = data_dict['led']
                 try:
-                    brightness_value = int(data_dict['brightness'])
-                    update_LED(led, brightness_value)
+                    brightness_value = int(data_dict['brightness']) # Grabs b val
+                    update_LED(led, brightness_value) # Changes the LED
                 except ValueError:
                     print("Invalid value")
 
-        # Send response
+       # Server WebPage response
         response = web_page()
         conn.send(b'HTTP/1.1 200 OK\r\n')
         conn.send(b'Content-Type: text/html\r\n')
@@ -92,18 +91,19 @@ def serve_web_page():
 
 try:
     web_thread = threading.Thread(target=serve_web_page)
-    web_thread.daemon = True
+    web_thread.daemon = True # automatic termination
     web_thread.start()
-    print("Web server started. Access at http://<your-pi-ip>:8080")
-    print("Press Ctrl+C to stop the server")
+    print("Web Server Available. Access http://<your-pi-ip>:8080")
+    print("Ctrl + C to cancel program")
     
     while True:
         sleep(1)
 except KeyboardInterrupt:
-    print("\nCleaning up GPIO...")
+    print("\nGPIO Cleanup Incoming...")
     for n in pwm.values():
         n.stop()
     GPIO.cleanup()
+
 
 
 
