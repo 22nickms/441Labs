@@ -3,10 +3,10 @@ import socket
 from time import sleep
 import threading
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM) #
 
 # LED configuration
-ledpins = {'LED1': 17, 'LED2': 27, 'LED3': 22}
+ledpins = {'LED1': 17, 'LED2': 27, 'LED3': 22} # {} for automatically assigning LED names to pin
 brightness = {"LED1": 0, "LED2": 0, "LED3": 0}
 
 # PWM Initialization
@@ -81,9 +81,9 @@ def parsePOSTdata(data):
     return data_dict
 
 def update_LED(led, brightness_value):
-    if led in pwm:
-        pwm[led].ChangeDutyCycle(brightness_value)
-        brightness[led] = brightness_value
+    if led in pwm: # LED Availability
+        pwm[led].ChangeDutyCycle(brightness_value) # PWM --> LED
+        brightness[led] = brightness_value # Brightness Tracker
         print(f"{led} brightness set to {brightness_value}%")
 
 def serve_web_page():
@@ -105,8 +105,8 @@ def serve_web_page():
             if 'led' in data_dict and 'brightness' in data_dict:
                 led = data_dict['led']
                 try:
-                    brightness_value = int(data_dict['brightness'])
-                    update_LED(led, brightness_value)
+                    brightness_value = int(data_dict['brightness']) # Grabs b val
+                    update_LED(led, brightness_value) # Changes the LED
                 except ValueError:
                     print("Invalid value")
 
@@ -120,7 +120,7 @@ def serve_web_page():
 
 try:
     web_thread = threading.Thread(target=serve_web_page)
-    web_thread.daemon = True
+    web_thread.daemon = True # automatic termination
     web_thread.start()
     print("Web server started. Access at http://<your-pi-ip>:8080")
     print("Press Ctrl+C to stop the server")
@@ -132,3 +132,4 @@ except KeyboardInterrupt:
     for n in pwm.values():
         n.stop()
     GPIO.cleanup()
+
