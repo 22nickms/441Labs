@@ -92,3 +92,4 @@ if __name__ == '__main__':
         for p in pwm.values():
             p.stop()
         GPIO.cleanup()
+
