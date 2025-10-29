@@ -38,7 +38,7 @@ def web_page():
 </body>
 </html>
 """
-return bytes(html, 'utf-8')
+    return bytes(html, 'utf-8')
 
 def parsePOSTdata(data): # From lecture
     data_dict = {}
@@ -104,4 +104,5 @@ except KeyboardInterrupt:
     for n in pwm.values():
         p.stop()
     GPIO.cleanup()
+
 
