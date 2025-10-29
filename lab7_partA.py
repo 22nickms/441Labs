@@ -78,7 +78,7 @@ def serve_web_page():
                 led = data_dict['led']
                 try:
                     brightness_value = int(data_dict['brightness'])
-                    update_led(led, brightness_value)
+                    update_LED(led, brightness_value)
                 except ValueError:
                     print("Invalid value")
 
@@ -102,7 +102,8 @@ try:
 except KeyboardInterrupt:
     print("\nCleaning up GPIO...")
     for n in pwm.values():
-        p.stop()
+        n.stop()
     GPIO.cleanup()
+
 
 
