@@ -1,20 +1,20 @@
-import RPi.GPIO as GPIO
-import socket
-from time import sleep
-import threading
+import RPi.GPIO as GPIO # GPIO Module
+import socket # Socket Module
+from time import sleep # Sleep Module
+import threading # Threading Module
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM) #
 
 # LED configuration
-LED_PINS = {'LED1': 17, 'LED2': 27, 'LED3': 22}
+ledpins = {'LED1': 17, 'LED2': 27, 'LED3': 22}
 brightness = {"LED1": 0, "LED2": 0, "LED3": 0}
 
-# Initialize PWM for all LEDs
+# PWM Initialization
 pwm = {}
-for key, pin in LED_PINS.items():
+for led, pin in ledpins.items():
     GPIO.setup(pin, GPIO.OUT)
-    pwm[key] = GPIO.PWM(pin, 1000)
-    pwm[key].start(0)
+    pwm[led] = GPIO.PWM(pin, 1000)
+    pwm[led].start(0)
 
 def web_page():
     html = f"""<!DOCTYPE html>
@@ -36,27 +36,26 @@ def web_page():
         <input type="submit" value="Change Brightness">
     </form>
 </body>
-</html>"""
-    return bytes(html, 'utf-8')
+</html>
+"""
+return bytes(html, 'utf-8')
 
-def parsePOSTdata(data):
+def parsePOSTdata(data): # From lecture
     data_dict = {}
     idx = data.find('\r\n\r\n') + 4
     body = data[idx:]
     pairs = body.split('&')
     for pair in pairs:
-        if '=' in pair:
-            k, v = pair.split('=', 1)
-            # URL decode the values
-            v = v.replace('+', ' ')  # Simple decoding for spaces
-            data_dict[k] = v
+        key_val = pair.split('=')
+        if len(key_val) == 2:
+            data_dict[key_val[0]] = key_val[1]
     return data_dict
 
-def update_led(led_name, brightness_value):
-    if led_name in pwm:
-        pwm[led_name].ChangeDutyCycle(brightness_value)
-        brightness[led_name] = brightness_value
-        print(f"{led_name} brightness set to {brightness_value}%")
+def update_LED(led, brightness_value):
+    if led in pwm:
+        pwm[led].ChangeDutyCycle(brightness_value)
+        brightness[led] = brightness_value
+        print(f"{led} brightness set to {brightness_value}%")
 
 def serve_web_page():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -68,20 +67,20 @@ def serve_web_page():
         conn, (client_ip, client_port) = s.accept()
         print(f"Connection from {client_ip}:{client_port}")
         request = conn.recv(2048).decode('utf-8')
-        print(f"Request: {request.split()[0]} {request.split()[1]}")
+       # print(f"Request: {request.split()[0]} {request.split()[1]}")
 
-        # Handle POST requests
+        # POST Requests 
         if "POST" in request:
             data_dict = parsePOSTdata(request)
             print(f"POST data: {data_dict}")
             
             if 'led' in data_dict and 'brightness' in data_dict:
-                led_name = data_dict['led']
+                led = data_dict['led']
                 try:
                     brightness_value = int(data_dict['brightness'])
-                    update_led(led_name, brightness_value)
+                    update_led(led, brightness_value)
                 except ValueError:
-                    print("Invalid brightness value")
+                    print("Invalid value")
 
         # Send response
         response = web_page()
@@ -102,4 +101,7 @@ try:
         sleep(1)
 except KeyboardInterrupt:
     print("\nCleaning up GPIO...")
+    for n in pwm.values():
+        p.stop()
     GPIO.cleanup()
+
