@@ -6,7 +6,7 @@ import threading # Threading Module
 GPIO.setmode(GPIO.BCM) #
 
 # LED configuration
-ledpins = {'LED1': 17, 'LED2': 27, 'LED3': 22}
+ledpins = {'LED1': 17, 'LED2': 27, 'LED3': 22} # {} for automatically assigning LED names to pins
 brightness = {"LED1": 0, "LED2": 0, "LED3": 0}
 
 # PWM Initialization
@@ -103,6 +103,7 @@ except KeyboardInterrupt:
     for n in pwm.values():
         n.stop()
     GPIO.cleanup()
+
 
 
 
