@@ -58,3 +58,4 @@ class Bug:
     def stop(self):
         self.__move = False
 
+
